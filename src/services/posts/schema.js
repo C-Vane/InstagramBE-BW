@@ -4,9 +4,7 @@ const PostSchema = new Schema(
   {
     text: {
       type: String,
-      required: true,
     },
-    username: { type: String, required: true },
     user: {
       type: Schema.Types.ObjectId,
       ref: "Users",
@@ -23,7 +21,7 @@ const PostSchema = new Schema(
     tags: [{ type: Schema.Types.ObjectId, ref: "Users", required: true }],
     images: { type: String, required: true, default: "https://via.placeholder.com/500" },
   },
-  { timesstamps: true }
+  { timestamps: true }
 );
 //push comments into posts
 

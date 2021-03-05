@@ -10,7 +10,6 @@ const StorySchema = new Schema(
     },
     text: {
       type: String,
-      required: false,
     },
     image: {
       type: String,

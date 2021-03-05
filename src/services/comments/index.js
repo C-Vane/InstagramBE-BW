@@ -31,7 +31,7 @@ route.post("/:post", authorize, async (req, res, next) => {
 
 route.get("/:post", authorize, async (req, res, next) => {
   try {
-    const comments = await Comment.find({ post: req.params.post }).populate("user", "-password -refreshTokens -email -followers -following -saved -puts -tagged -posts");
+    const comments = await Comment.find({ post: req.params.post }).sort({ createdAt: -1 }).populate("user", "-password -refreshTokens -email -followers -following -saved -puts -tagged -posts");
     res.status(201).send(comments);
   } catch (error) {
     next(error);

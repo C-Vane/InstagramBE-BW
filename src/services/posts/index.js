@@ -23,7 +23,7 @@ postRouter.post("/", authorize, async (req, res, next) => {
   try {
     const newPost = new PostModel({ ...req.body, user: req.user._id });
     const savedPost = await newPost.save();
-    if (req.body.tags) {
+    /* if (req.body.tags) {
       let notification;
       req.body.tags.forEach(async (userID) => {
         //create notification for each user
@@ -40,9 +40,11 @@ postRouter.post("/", authorize, async (req, res, next) => {
           }
         );
       });
-    }
-    res.status(201).send({ post: savedPost.populate("user", "-password -refreshTokens -email -followers -following -saved -puts -tagged -posts"), ok: true });
+    } */
+
+    res.status(201).send({ post: savedPost, ok: true });
   } catch (error) {
+    console.log(error);
     next(error);
   }
 });
@@ -96,12 +98,13 @@ postRouter.get("/:id", authorize, async (req, res, next) => {
       .populate("tags", "-password -refreshTokens -email -followers -following -saved -puts -tagged -posts")
       .populate("user", "-password -refreshTokens -email -followers -following -saved -puts -tagged -posts");
     if (post._id) {
+      console.log(post);
       if (post.user.private) {
-        if (req.user.following.includes(post.user._id)) res.status(200).send(post);
+        res.status(200).send(post);
       } else {
         res.send.status(201).send(post);
       }
-      res.status(401).send(`@${post.user.username}'s posts are private`);
+      res.status(403).send(`@${post.user.username}'s posts are private`);
     } else {
       const error = new Error("Post not found");
       error.status = 404;
@@ -124,7 +127,7 @@ postRouter.put("/:id", authorize, async function (req, res, next) {
   try {
     const updated = await PostModel.findOneAndUpdate({ _id: req.params.id, user: req.user }, req.body);
 
-    if (req.body.tags.length > 0 && updated) {
+    if (req.body.tags && req.body.tags.length > 0 && updated) {
       req.body.tags.forEach(async (userID) => {
         const user = await UserSchema.findOne({ _id: userID, tagged: req.params.id });
         user
@@ -161,6 +164,7 @@ postRouter.put("/:id", authorize, async function (req, res, next) {
 });
 postRouter.put("/:id/picture", authorize, cloudinaryMulter.single("image"), async (req, res, next) => {
   try {
+    console.log(req.file);
     const updatedPost = await PostModel.findOneAndUpdate({ _id: req.params.id, user: req.user._id }, { images: req.file.path }, { runValidators: true, new: true })
       .populate("comments.user", "-password -refreshTokens -email -followers -following -saved -puts -tagged -posts")
       .populate("tags", "-password -refreshTokens -email -followers -following -saved -puts -tagged -posts")

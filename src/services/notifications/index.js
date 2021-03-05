@@ -12,7 +12,7 @@ const route = express.Router();
 
 const q2m = require("query-to-mongo");
 
-route.post("/approveFollow/:id", authorize, async (req, res, next) => {
+route.post("/acceptFollow/:id", authorize, async (req, res, next) => {
   try {
     //user that requested the follow and add to his following list and also add to current user followers listEndpoints
     const notification = await Notification.findByIdAndUpdate(
@@ -37,8 +37,10 @@ route.post("/approveFollow/:id", authorize, async (req, res, next) => {
       );
       if (from) {
         req.user.followers = [...req.user.followers, from._id];
+        await req.user.save();
         const newNotification = new Notification({ from: req.user._id, to: from._id, action: "accepted your follow request" });
         await newNotification.save();
+        console.log(req.user, from);
         res.status(201).send({ ok: true });
       } else {
         const err = new Error("User not found");
@@ -62,7 +64,8 @@ route.get("/", authorize, async (req, res, next) => {
       .sort({ createdAt: -1 })
       .skip(query.options.skip)
       .limit(query.options.limit)
-      .populate("from", "-password -refreshTokens -email -followers -following -saved -puts -tagged -posts");
+      .populate("from", "-password -refreshTokens -email -followers -following -saved -puts -tagged -posts")
+      .populate("post");
 
     const links = query.links("/notification", total);
     res.status(200).send({ notification, total, links });
@@ -82,7 +85,7 @@ route.post("/view/:id", authorize, async (req, res, next) => {
         useFindAndModify: false,
       }
     );
-    notification && res.send(201).send({ notification, ok: true });
+    notification && res.status(201).send({ notification, ok: true });
   } catch (error) {
     next(error);
   }

@@ -67,11 +67,10 @@ route.get("/", authorize, async (req, res, next) => {
       return { user: followed_user };
     });
 
-    const newStory = await Story.find({ exclude: { $nin: [req.user._id] }, $or: [...query, { user: req.user._id }] }).populate(
-      "user",
-      "-password -refreshTokens -email -followers -following -saved -posts -tagged"
-    );
-    res.status(201).send(newStory);
+    const stories = await Story.find({ exclude: { $nin: [req.user._id] }, $or: [...query, { _id: null }] })
+      .sort({ createdAt: -1 })
+      .populate("user", "-password -refreshTokens -email -followers -following -saved -posts -tagged");
+    res.status(201).send(stories);
   } catch (error) {
     next(error);
   }
