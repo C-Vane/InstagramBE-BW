@@ -2,44 +2,45 @@
 
 We love instagram, its an app that we use to share best moments in our life!
 
-But it doesnt have image upload feature on web , lets make it!
+But it doesnt have image upload feature on web , so we made it!
 
 Here are the features to implement:
 
 ## Users
 
-- user should register and login with email password or oauth.
-- user should be able to edit their profile details, such as avatar, username (only their own data)
-- user profile should contain previous posts.
+- user can register and login with email password or oauth.
+- user can be able to edit their profile details, such as avatar, username (only their own data)
+- user profile contains previous posts.
 
 ## Posts
 
-- user should be able to add/delete posts to the feed (user can edit & delete only their own data).
-- it should be possible to comment on post. (user can delete and edit only his own comments).
-- it should be possible to like/unlike post.
-- it should be possible to see the list of users who liked the post.
+- user can add/delete posts to the feed (user can edit & delete only their own data).
+- possible to comment on post. (user can delete and edit only his own comments).
+- possible to like/unlike post.
+- to see the list of users who liked the post.
 
 
-## [EXTRA] Connections
+##  Connections
 
-- user should be able to follow/unfollow other users
-- user should be able to see posts of the users he is following
+- user can follow/unfollow other users
+- user can see posts of the users he is following
 
-## [EXTRA] Chat
+## Chat
 
-- user should be able to see/delete previous chats (they can see & delete only their own data).
-- user should be able to search other users to start chat with by username.
+- user can see/delete previous chats (they can see & delete only their own data).
+- user can search other users to start chat with by username.
 - implement private 1on1 chat.
 - implement messages that will disappear after 24 hours
 
-**Not enough?**
 
-## [EXTRA] Stories
+## Stories
 
 - Add stories feature to upload videos (max 10 sec) or photos to your stories
 
-Tips :
+ - USed cloudinary to serve images and videos
+ 
+## [EXTRA] Notifiactions
 
- - Use cloudinary to serve images
+- When another users interacts with a user he will get a notification (like,comment,follow requests,follow)
 
-Deploy the project, show everyone how skilled you are!
+
